@@ -1,201 +1,159 @@
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.red),
-      home: EmailSender(),
+      debugShowCheckedModeBanner: false,
+      title: 'Bottom Nav Bar V2',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const BottomNavBarV2(),
     );
   }
 }
 
-class EmailSender extends StatefulWidget {
-  const EmailSender({Key? key}) : super(key: key);
+class BottomNavBarV2 extends StatefulWidget {
+  const BottomNavBarV2({Key? key}) : super(key: key);
 
   @override
-  _EmailSenderState createState() => _EmailSenderState();
+  _BottomNavBarV2State createState() => _BottomNavBarV2State();
 }
 
-class _EmailSenderState extends State<EmailSender> {
-  List<String> attachments = [];
-  bool isHTML = false;
+class _BottomNavBarV2State extends State<BottomNavBarV2> {
+  int currentIndex = 0;
 
-  final _recipientController = TextEditingController(
-    text:
-        'type Email here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
-  );
-
-  final _subjectController = TextEditingController(text: ' ');
-
-  final _bodyController = TextEditingController(
-    text: ' ',
-  );
-
-  Future<void> send() async {
-    final Email email = Email(
-      body: _bodyController.text,
-      subject: _subjectController.text,
-      recipients: [_recipientController.text],
-      attachmentPaths: attachments,
-      isHTML: isHTML,
-    );
-
-    String platformResponse;
-
-    try {
-      await FlutterEmailSender.send(email);
-      platformResponse = 'success';
-    } catch (error) {
-      platformResponse = error.toString();
-    }
-
-    if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(platformResponse),
-      ),
-    );
-  }
-
-  void clear() {
-    _subjectController.clear();
-    _bodyController.clear();
-    _removeAllAttachment();
+  setBottomBarIndex(index) {
+    setState(() {
+      currentIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Email app'),
-        actions: <Widget>[
-          IconButton(
-            onPressed: send,
-            icon: Icon(Icons.send),
-          )
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            // Padding(
-            //   padding: EdgeInsets.all(8.0),
-            //   child: TextField(
-            //     controller: _recipientController,
-            //     decoration: InputDecoration(
-            //       border: OutlineInputBorder(),
-            //       labelText: 'Recipient',
-            //     ),
-            //   ),
-            // ),
-
-            Card(
-              elevation: 5,
-              child: TextField(
-                controller: _subjectController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Subject',
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: _bodyController,
-                  maxLines: null,
-                  expands: true,
-                  textAlignVertical: TextAlignVertical.top,
-                  decoration: InputDecoration(
-                    labelText: 'Body',
-                    border: OutlineInputBorder(),
+      backgroundColor: Colors.white.withAlpha(55),
+      body: Stack(
+        children: [
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: SizedBox(
+              width: size.width,
+              height: 80,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  CustomPaint(
+                    size: Size(size.width, 80),
+                    painter: BNBCustomPainter(),
                   ),
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  for (var i = 0; i < attachments.length; i++)
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            attachments[i],
-                            softWrap: false,
-                            overflow: TextOverflow.fade,
+                  Center(
+                    heightFactor: 0.6,
+                    child: FloatingActionButton(
+                        backgroundColor: Colors.orange,
+                        child: const Icon(Icons.shopping_basket),
+                        elevation: 0.1,
+                        onPressed: () {}),
+                  ),
+                  SizedBox(
+                    width: size.width,
+                    height: 80,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.home,
+                            color: currentIndex == 0
+                                ? Colors.orange
+                                : Colors.grey.shade400,
                           ),
+                          onPressed: () {
+                            setBottomBarIndex(0);
+                          },
+                          splashColor: Colors.white,
                         ),
                         IconButton(
-                          icon: Icon(Icons.remove_circle),
-                          onPressed: () => {_removeAttachment(i)},
-                        )
+                            icon: Icon(
+                              Icons.restaurant_menu,
+                              color: currentIndex == 1
+                                  ? Colors.orange
+                                  : Colors.grey.shade400,
+                            ),
+                            onPressed: () {
+                              setBottomBarIndex(1);
+                            }),
+                        Container(
+                          width: size.width * 0.20,
+                        ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.bookmark,
+                              color: currentIndex == 2
+                                  ? Colors.orange
+                                  : Colors.grey.shade400,
+                            ),
+                            onPressed: () {
+                              setBottomBarIndex(2);
+                            }),
+                        IconButton(
+                            icon: Icon(
+                              Icons.notifications,
+                              color: currentIndex == 3
+                                  ? Colors.orange
+                                  : Colors.grey.shade400,
+                            ),
+                            onPressed: () {
+                              setBottomBarIndex(3);
+                            }),
                       ],
                     ),
-                  Row(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: IconButton(
-                          icon: Icon(Icons.attach_file),
-                          onPressed: _openImagePicker,
-                        ),
-                      ),
-                      // Align(
-                      //   alignment: Alignment.centerRight,
-                      //   child: IconButton(
-                      //     icon: Icon(Icons.cancel),
-                      //     onPressed: () => {_removeAllAttachment},
-                      //   ),
-                      // ),
-                      Text('upload image for the item'),
-                    ],
-                  ),
-                  Container(
-                    child: ElevatedButton(
-                        onPressed: (clear), child: Text('Clear All ')),
-                  ),
+                  )
                 ],
               ),
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
+}
 
-  void _openImagePicker() async {
-    final picker = ImagePicker();
-    PickedFile? pick = await picker.getImage(source: ImageSource.gallery);
-    if (pick != null) {
-      setState(() {
-        attachments.add(pick.path);
-      });
-    }
+class BNBCustomPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
+
+    Path path = Path();
+    path.moveTo(0, 20); // Start
+    path.quadraticBezierTo(size.width * 0.20, 0, size.width * 0.35, 0);
+    path.quadraticBezierTo(size.width * 0.40, 0, size.width * 0.40, 20);
+    path.arcToPoint(Offset(size.width * 0.60, 20),
+        radius: const Radius.circular(20.0), clockwise: false);
+    path.quadraticBezierTo(size.width * 0.60, 0, size.width * 0.65, 0);
+    path.quadraticBezierTo(size.width * 0.80, 0, size.width, 20);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.lineTo(0, 20);
+    canvas.drawShadow(path, Colors.black, 5, true);
+    canvas.drawPath(path, paint);
   }
 
-  void _removeAttachment(int index) {
-    setState(() {
-      attachments.removeAt(index);
-    });
-  }
-
-  void _removeAllAttachment() {
-    setState(() {
-      attachments.clear();
-    });
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }

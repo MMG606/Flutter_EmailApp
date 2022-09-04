@@ -90,25 +90,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-  assets:
-    - C:/Users/moham/Downloads/flutter images/0.jfif
-    - C:/Users/moham/Downloads/flutter images/1.jfif
-    - C:/Users/moham/Downloads/flutter images/2.jfif
-    - C:/Users/moham/Downloads/flutter images/3.jfif
-    - C:/Users/moham/Downloads/flutter images/4.jfif
-    - C:/Users/moham/Downloads/flutter images/5.jfif
-    - C:/Users/moham/Downloads/flutter images/6.jfif
-    - C:/Users/moham/Downloads/flutter images/7.jfif
-    - C:/Users/moham/Downloads/flutter images/8.jfif
-    - C:/Users/moham/Downloads/flutter images/9.jfif
-    - C:/Users/moham/Downloads/flutter images/10.jfif
-    - C:/Users/moham/Downloads/flutter images/11.jfif
-    - C:/Users/moham/Downloads/flutter images/12.jfif
-    - C:/Users/moham/Downloads/flutter images/13.jfif
-    - C:/Users/moham/Downloads/flutter images/14.jfif
-    - C:/Users/moham/Downloads/flutter images/15.jfif
-    - C:/Users/moham/Downloads/flutter images/16.jfif
-    - C:/Users/moham/Downloads/flutter images/17.jfif
-    - C:/Users/moham/Downloads/flutter images/18.jfif
-    - C:/Users/moham/Downloads/flutter images/19.jfif
-    - C:/Users/moham/Downloads/flutter images/20.jfif
+  
